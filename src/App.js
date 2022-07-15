@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useContext, useEffect } from 'react';
+import { Routes, Route } from "react-router-dom";
+import Game from './pages/Game.js';
+import Home from './pages/Home.js';
+import Result from './pages/Result.js';
+import { Context } from './hooks/provider.js';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const { setTotalResultToStorage, setTour } = useContext(Context);
+
+    useEffect(() => {
+        const resultData = JSON.parse(localStorage.getItem('totalResult'));
+        const tourData = JSON.parse(localStorage.getItem('tour'));
+        if (resultData) {
+            setTotalResultToStorage(resultData);
+        } else {
+            setTotalResultToStorage();
+        }
+
+        if (tourData) {
+            setTour(tourData);
+        }
+    }, []);
+
+    // React router ayarlamaları
+    return (
+        <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/game" element={<Game />} />
+            <Route path="/result" element={<Result />} />
+        </Routes>
+    );
+};
 
 export default App;
